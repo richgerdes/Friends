@@ -102,7 +102,7 @@ public class Friends {
 			while(true){
 
 				System.out.println("Select an option:");
-				System.out.println("1) Show graph of a school");
+				System.out.println("1) Subgraph of School");
 				System.out.println("2) Introduction Chain");
 				System.out.println("3) Cliques at school");
 				System.out.println("4) Show Connectors");
