@@ -1,3 +1,5 @@
+package apps;
+
 /*
  * Friendship Graph Algorithms
  * Fall 2013
@@ -13,14 +15,17 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import structures.PeopleGraph;
+import structures.Person;
+
 public class Friends {
 	
-	HashMap<String, Person> people;
+	PeopleGraph people = new PeopleGraph();
 	
 	/*
 	 * Constructor
 	 * 
-	 * Creates and instance of Friends it reads the input file to build the graph
+	 * @param path Path to input file containing graph data.
 	 * 
 	 */
 	
@@ -38,7 +43,8 @@ public class Friends {
 			int i = 0;
 			while(sc.hasNext() && i < numPeople){
 				
-				String[] arr = sc.nextLine().split("|");
+				String[] arr = sc.nextLine().split("\\|");
+				System.out.println(arr[0] + " | " + arr[1]);
 				
 				if(arr[1].equals("y")){
 					people.put(arr[0], new Person(arr[0], arr[2]));
@@ -50,8 +56,9 @@ public class Friends {
 			}
 			
 			while(sc.hasNext()){
-				String[] arr = sc.nextLine().split("|");
-
+				String[] arr = sc.nextLine().split("\\|");
+				System.out.println(arr[0] + " - " + arr[1]);
+				
 				people.get(arr[0]).addFriend(arr[1]);
 				people.get(arr[1]).addFriend(arr[0]);
 				
@@ -69,9 +76,7 @@ public class Friends {
 	/*
 	 * Main
 	 * 
-	 * This is a loop run the project. it get the input file and sets up an instance of Friends.java
-	 * 
-	 * This also bring the user through the menu of options and operations on the Friend graph
+	 * Runs the menu of options and operations on the Friend graph
 	 * 
 	 */
 	
