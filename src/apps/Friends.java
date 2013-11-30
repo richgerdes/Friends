@@ -45,8 +45,11 @@ public class Friends {
 				
 				String[] arr = sc.nextLine().split("\\|");
 				// System.out.println(arr[0] + " | " + arr[1]);
+				arr[0] = arr[0].toLowerCase();
+				arr[1] = arr[1].toLowerCase();
 				
 				if(arr[1].equals("y")){
+					arr[2] = arr[2].toLowerCase();
 					people.put(arr[0], new Person(arr[0], arr[2]));
 				}else{
 					people.put(arr[0], new Person(arr[0], ""));
@@ -59,7 +62,7 @@ public class Friends {
 				String[] arr = sc.nextLine().split("\\|");
 				// System.out.println(arr[0] + " | " + arr[1]);
 				
-				people.addEdge(arr[0], arr[1]);
+				people.addEdge(arr[0].toLowerCase(), arr[1].toLowerCase());
 				
 			}
 			
