@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.Scanner;
 
 import structures.PeopleGraph;
@@ -20,7 +19,7 @@ import structures.Person;
 
 public class Friends {
 	
-	PeopleGraph people = new PeopleGraph();
+	PeopleGraph people;
 	
 	/*
 	 * Constructor
@@ -40,6 +39,9 @@ public class Friends {
 				System.out.println("File is empty");
 				System.exit(-1);
 			}
+
+			people = new PeopleGraph(numPeople);
+			
 			int i = 0;
 			while(sc.hasNext() && i < numPeople){
 				
@@ -128,6 +130,10 @@ public class Friends {
 					}else if(selection == 5){
 						System.out.println("Exiting");
 						System.exit(0);
+					}else if(selection == 9) {
+						// Debug
+						friends.people.printGraph();
+
 					}else{
 						System.out.println("Bad input please try agian.");
 					}
