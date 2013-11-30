@@ -44,7 +44,7 @@ public class Friends {
 			while(sc.hasNext() && i < numPeople){
 				
 				String[] arr = sc.nextLine().split("\\|");
-				System.out.println(arr[0] + " | " + arr[1]);
+				// System.out.println(arr[0] + " | " + arr[1]);
 				
 				if(arr[1].equals("y")){
 					people.put(arr[0], new Person(arr[0], arr[2]));
@@ -57,10 +57,9 @@ public class Friends {
 			
 			while(sc.hasNext()){
 				String[] arr = sc.nextLine().split("\\|");
-				System.out.println(arr[0] + " - " + arr[1]);
+				// System.out.println(arr[0] + " | " + arr[1]);
 				
-				people.get(arr[0]).addFriend(arr[1]);
-				people.get(arr[1]).addFriend(arr[0]);
+				people.addEdge(arr[0], arr[1]);
 				
 			}
 			
@@ -105,7 +104,6 @@ public class Friends {
 			Friends friends = new Friends(path);
 			
 			while(true){
-
 				System.out.println("Select an option:");
 				System.out.println("1) Subgraph of School");
 				System.out.println("2) Introduction Chain");

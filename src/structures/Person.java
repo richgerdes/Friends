@@ -6,8 +6,9 @@ public class Person {
 	
 	String name;
 	String school;
+	public int index;
 	
-	ArrayList<String> friends = new ArrayList<String>();
+	ArrayList<Person> friends = new ArrayList<Person>();
 	
 	public Person(String name, String school){
 		
@@ -16,8 +17,16 @@ public class Person {
 		
 	}
 	
-	public void addFriend(String friend){
+	public void addFriend(Person friend){
 		friends.add(friend);
 	}
 
+	public String getName() {
+		return this.name;
+	}
+	
+	public String getSchool() {
+		return this.school;
+	}
+	
 }
