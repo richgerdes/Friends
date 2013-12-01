@@ -21,7 +21,13 @@ public class PeopleGraph {
 	}
 	
 	public Person get(String name) {
-		return this.get(nameToIndex.get(name));
+		Integer index = this.nameToIndex.get(name);
+		if (index == null) {
+			return null;
+		}
+		else {
+			return this.get(index);
+		}
 	}
 	
 	public void put(String name, Person person) {
@@ -62,22 +68,26 @@ public class PeopleGraph {
 		}
 	}
 	
-	private void printFriends(Person person) {
-		PersonNode neighbor = getNeighbor(person);
-		while (neighbor!=null) {
-			// need to do this in a way that removes duplicates
-			System.out.println(person.getName() + "|" + neighbor.person.getName());
-			neighbor = neighbor.next;
-		}
-	}
-	
 	public void printGraph() {
 		System.out.println(this.nodes.size());
 		for (Person person: this.nodes) {
 			printPerson(person);
 		}
+		ArrayList<String> lines = new ArrayList<String>();
 		for (Person person: this.nodes) {
-			printFriends(person);
+			PersonNode neighbor = getNeighbor(person);
+			while (neighbor!=null) {
+				if (!lines.contains(neighbor.person.getName() + "|" +person.getName())) {
+					lines.add(person.getName() + "|" + neighbor.person.getName());
+				}
+				neighbor = neighbor.next;
+			}
+		}
+		for (String line: lines) {
+			System.out.println(line);
 		}
 	}
+	
+
+	
 }

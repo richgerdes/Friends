@@ -121,6 +121,7 @@ public class Friends {
 					int selection = Integer.parseInt(read);
 					if(selection == 1){
 						//TODO Graph of school
+						//TODO read in school name
 					}else if(selection == 2){
 						//TODO Intro Chain
 					}else if(selection == 3){
@@ -132,7 +133,7 @@ public class Friends {
 						System.exit(0);
 					}else if(selection == 9) {
 						// Debug
-						friends.people.printGraph();
+						friends.people.getSchoolSubgraphs("rutgers");
 
 					}else{
 						System.out.println("Bad input please try agian.");
