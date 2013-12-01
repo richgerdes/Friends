@@ -2,6 +2,9 @@ package structures;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Queue;
+import java.util.LinkedList; //queue
+
 import structures.AdjacencyLinkedList;
 
 
@@ -30,9 +33,9 @@ public class PeopleGraph {
 		}
 	}
 	
-	public void put(String name, Person person) {
+	public void put(Person person) {
 		int index = nodes.size();
-		this.nameToIndex.put(name, index); 
+		this.nameToIndex.put(person.getName(), index); 
 		this.nodes.add(person);
 	}
 	
@@ -54,7 +57,8 @@ public class PeopleGraph {
 		this.adjLL.addEdge(p2index, p1);
 				
 	}
-
+	
+	// for convenience
 	public void addEdge(Person p1, Person p2) {
 		this.addEdge(p1.getName(), p2.getName());
 	}
@@ -77,8 +81,10 @@ public class PeopleGraph {
 		for (Person person: this.nodes) {
 			PersonNode neighbor = getNeighbor(person);
 			while (neighbor!=null) {
-				if (!lines.contains(neighbor.person.getName() + "|" +person.getName())) {
-					lines.add(person.getName() + "|" + neighbor.person.getName());
+				String forwards = person.getName() + "|" + neighbor.person.getName();
+				String backwards = neighbor.person.getName() + "|" +person.getName();
+				if ((!lines.contains(backwards)) && (!lines.contains(forwards))) {
+					lines.add(forwards);
 				}
 				neighbor = neighbor.next;
 			}
@@ -88,6 +94,33 @@ public class PeopleGraph {
 		}
 	}
 	
-
+	public PeopleGraph getSchoolSubgraph(String school) {
+		PeopleGraph subgraph = new PeopleGraph(this.nodes.size());
+		
+		// it would probably be easier for this to be split into multiple functions
+		for (Person p: this.nodes) {
+			Queue<Person> q = new LinkedList<Person>();
+			if ((subgraph.get(p.getName()) == null) && (p.getSchool().equals(school))) {
+				q.add(p);
+				subgraph.put(p);
+				while (!q.isEmpty()) {					
+					Person person = q.remove();
+					PersonNode neighbor = this.getNeighbor(person);
+					while (neighbor != null) {
+						if (neighbor.person.getSchool().equals(school)) {
+							if (subgraph.get(neighbor.person.getName()) == null) {
+								q.add(neighbor.person);
+								subgraph.put(neighbor.person);
+							}
+							subgraph.addEdge(person, neighbor.person);
+						}
+						neighbor = neighbor.next;
+					}
+				}
+			}
+		}
+		
+		return subgraph;
+	}
 	
 }

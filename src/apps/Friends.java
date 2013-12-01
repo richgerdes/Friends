@@ -52,9 +52,9 @@ public class Friends {
 				
 				if(arr[1].equals("y")){
 					arr[2] = arr[2].toLowerCase();
-					people.put(arr[0], new Person(arr[0], arr[2]));
+					people.put(new Person(arr[0], arr[2]));
 				}else{
-					people.put(arr[0], new Person(arr[0], ""));
+					people.put(new Person(arr[0], ""));
 				}
 				
 				i++;
@@ -120,8 +120,9 @@ public class Friends {
 				if(isNumber(read)){
 					int selection = Integer.parseInt(read);
 					if(selection == 1){
-						//TODO Graph of school
-						//TODO read in school name
+						System.out.println("Type the name of a school to search for:");
+						String school = br.readLine().toLowerCase();
+						friends.people.getSchoolSubgraph(school).printGraph();
 					}else if(selection == 2){
 						//TODO Intro Chain
 					}else if(selection == 3){
@@ -133,7 +134,7 @@ public class Friends {
 						System.exit(0);
 					}else if(selection == 9) {
 						// Debug
-						friends.people.getSchoolSubgraphs("rutgers");
+						friends.people.getSchoolSubgraph("rutgers").printGraph();
 
 					}else{
 						System.out.println("Bad input please try agian.");
