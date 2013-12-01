@@ -20,4 +20,7 @@ public class Person {
 		return this.school;
 	}
 	
+	public String toString() {
+		return this.name;
+	}
 }

@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import structures.PeopleGraph;
@@ -124,7 +125,20 @@ public class Friends {
 						String school = br.readLine().toLowerCase();
 						friends.people.getSchoolSubgraph(school).printGraph();
 					}else if(selection == 2){
-						//TODO Intro Chain
+						System.out.println("First person: ");
+						String name1 = br.readLine().toLowerCase();
+						System.out.println("Second person: ");
+						String name2 = br.readLine().toLowerCase();
+						
+						ArrayList<Person> chain = friends.people.shortestPath(name1, name2);
+						
+						if (chain != null) {
+							System.out.println(chain);
+						}
+						else {
+							System.out.println("There is no path from "+ name1+" to " + name2+".");
+						}
+						
 					}else if(selection == 3){
 						//TODO Cliques
 					}else if(selection == 4){
@@ -134,7 +148,7 @@ public class Friends {
 						System.exit(0);
 					}else if(selection == 9) {
 						// Debug
-						friends.people.getSchoolSubgraph("rutgers").printGraph();
+						System.out.println(friends.people.shortestPath("sam", "bob"));
 
 					}else{
 						System.out.println("Bad input please try agian.");
