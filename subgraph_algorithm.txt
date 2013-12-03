@@ -1,0 +1,16 @@
+Algorithm for school subgraph problem:
+create new subgraph
+for each node:
+	create new queue
+	if node is not in subgraph and node.getSchool == school:
+		push onto queue
+		add node to subgraph
+		while queue is not empty:
+			deque item
+			for every neighbor of item:
+				if neighbor.getSchool == school:
+					if not in subgraph:
+						push onto queue
+						add to subgraph
+
+					connect item and neighbor

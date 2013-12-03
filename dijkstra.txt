@@ -1,0 +1,41 @@
+Dijkstra on an unweighted simple graph
+
+initial node
+
+create fringe (priorityqueue/heap?)
+create distances hashmap
+create prev hashmap
+create done hashmap
+initialize distances and done to null and false
+
+set prev[initial] to initial
+add initial to done
+
+for neighbors of initial:
+set distances[neighbor] to 1
+set prev[neighbor] to initial
+add neighbor to the fringe
+
+
+while fringe is not empty
+	select smallest from the fringe
+	
+	get neighbors of smallest
+	for neighbors of smallest:
+		if done[neighbor]:
+			continue
+		if distances[neighbor] == null:
+			distances[neighbor] = distances[smallest]+1
+			prev[neighbor] = smallest
+			add neighbor to fringe
+		else:
+			if distances[smallest]+1 < distances[neighbor]:
+				distances[neighbor] = distances[smallest]+1
+				prev[neighbor] = smallest
+
+	remove smallest from the fringe
+	remove smallest from distances
+	add smallest to done
+	
+	if smallest == destination:
+		break
