@@ -140,7 +140,14 @@ public class Friends {
 						}
 						
 					}else if(selection == 3){
-						//TODO Cliques
+						System.out.println("Type the name of a school to search for:");
+						String school = br.readLine().toLowerCase();
+						ArrayList<PeopleGraph> cliques = friends.people.getSchoolSubgraph(school).getCliques();
+						
+						for(PeopleGraph p : cliques){
+							p.printGraph();
+						}
+						
 					}else if(selection == 4){
 						//TODO Connectors
 					}else if(selection == 5){

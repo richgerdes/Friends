@@ -238,5 +238,39 @@ public class PeopleGraph {
 		shortestPath.add(p2);
 		return shortestPath;
 	}
+
+	public ArrayList<PeopleGraph> getCliques() {
+		ArrayList<PeopleGraph> cliques = new ArrayList<PeopleGraph>();
+		// it would probably be easier for this to be split into multiple functions
+		for (Person p: this.nodes) {
+			boolean skip = false;
+			for(PeopleGraph pg : cliques){
+				if (pg.get(p.getName()) != null){
+					skip = true;
+				}
+			}
+			if(skip){
+				continue;
+			}
+			PeopleGraph clique = new PeopleGraph(this.nodes.size());
+			Queue<Person> q = new ArrayDeque<Person>();
+			if (clique.get(p.getName()) == null) {
+				q.add(p);
+				clique.put(p);
+				while (!q.isEmpty()) {					
+					Person person = q.remove();
+					for (PersonNode neighbor = this.getNeighbor(person); neighbor != null; neighbor = neighbor.next) {
+						if (clique.get(neighbor.person.getName()) == null) {
+							q.add(neighbor.person);
+							clique.put(neighbor.person);
+						}
+						clique.addEdge(person, neighbor.person);
+					}
+				}
+			}
+			cliques.add(clique);
+		}
+		return cliques;
+	}
 	
 }
