@@ -123,7 +123,7 @@ public class Friends {
 					if(selection == 1){
 						System.out.println("Type the name of a school to search for:");
 						String school = br.readLine().toLowerCase();
-						friends.people.getSchoolSubgraph(school).printGraph();
+						System.out.print(friends.people.getSchoolSubgraph(school));
 					}else if(selection == 2){
 						System.out.println("First person: ");
 						String name1 = br.readLine().toLowerCase();
@@ -145,7 +145,7 @@ public class Friends {
 						ArrayList<PeopleGraph> cliques = friends.people.getSchoolSubgraph(school).getCliques();
 						
 						for(PeopleGraph p : cliques){
-							p.printGraph();
+							System.out.println(p);
 						}
 						
 					}else if(selection == 4){

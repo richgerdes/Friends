@@ -64,35 +64,26 @@ public class PeopleGraph {
 		this.addEdge(p1.getName(), p2.getName());
 	}
 	
-	private void printPerson(Person person) {
-		if (!person.getSchool().equals("")) {
-			System.out.println(person.getName() + "|" + "y" + "|" + person.getSchool());
-		}
-		else {
-			System.out.println(person.getName() + "|" + "n");
-		}
-	}
-	
-	public void printGraph() {
-		System.out.println(this.nodes.size());
+	public String toString() {
+		String ret = "";
+		ret += this.nodes.size();
 		for (Person person: this.nodes) {
-			printPerson(person);
+			ret += "\n" + person;
 		}
 		ArrayList<String> lines = new ArrayList<String>();
 		for (Person person: this.nodes) {
-			PersonNode neighbor = getNeighbor(person);
-			while (neighbor!=null) {
+			for (PersonNode neighbor = getNeighbor(person); neighbor != null; neighbor = neighbor.next) {
 				String forwards = person.getName() + "|" + neighbor.person.getName();
 				String backwards = neighbor.person.getName() + "|" +person.getName();
 				if ((!lines.contains(backwards)) && (!lines.contains(forwards))) {
 					lines.add(forwards);
 				}
-				neighbor = neighbor.next;
 			}
 		}
 		for (String line: lines) {
-			System.out.println(line);
+			ret += "\n" + line;
 		}
+		return ret;
 	}
 	
 	public PeopleGraph getSchoolSubgraph(String school) {

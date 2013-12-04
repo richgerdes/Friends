@@ -19,8 +19,13 @@ public class Person {
 	public String getSchool() {
 		return this.school;
 	}
-	
+
 	public String toString() {
-		return this.name;
+		if (!school.equals("")) {
+			return name + "|" + "y" + "|" + school;
+		}
+		else {
+			return name + "|" + "n";
+		}
 	}
 }
