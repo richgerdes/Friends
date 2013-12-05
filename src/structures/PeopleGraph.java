@@ -6,6 +6,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Queue;
+import java.util.Stack;
 
 import structures.AdjacencyLinkedList;
 
@@ -229,10 +230,9 @@ public class PeopleGraph {
 		shortestPath.add(p2);
 		return shortestPath;
 	}
-
+	
 	public ArrayList<PeopleGraph> getCliques() {
 		ArrayList<PeopleGraph> cliques = new ArrayList<PeopleGraph>();
-		// it would probably be easier for this to be split into multiple functions
 		for (Person p: this.nodes) {
 			boolean skip = false;
 			for(PeopleGraph pg : cliques){
@@ -262,6 +262,74 @@ public class PeopleGraph {
 			cliques.add(clique);
 		}
 		return cliques;
+	}
+
+	public ArrayList<Person> getConnectors() {
+		ArrayList<Person> connectors = new ArrayList<Person>();
+		HashMap<Person, Integer> dfsnum = new HashMap<Person, Integer>();
+		HashMap<Person, Integer> back = new HashMap<Person, Integer>();
+		Stack<PersonNode> path = new Stack<PersonNode>();
+		int d = 1;
+		int b = 1;
+		
+		for(Person p : this.nodes){
+			if(dfsnum.get(p) != null){
+				continue;
+			}
+			
+			dfsnum.put(p, d);
+			back.put(p, b);
+
+			d++;
+			b++;
+			PersonNode neighbor = this.getNeighbor(p);
+			System.out.println(p.name);
+			
+			boolean once = false;
+
+			while(neighbor != null){
+				if(dfsnum.get(neighbor.person) == null){
+					dfsnum.put(neighbor.person, d);
+					back.put(neighbor.person, b);
+					d++;
+					b++;
+					path.push(neighbor);
+					neighbor = this.getNeighbor(neighbor.person);
+				}else{
+					if(path.size() > 0){
+						System.out.println(path.peek().person.name + "(" + dfsnum.get(path.peek().person) + ") <= " + neighbor.person.name + "(" +back.get(neighbor.person)+ ")");
+						if(dfsnum.get(path.peek().person) > back.get(neighbor.person))
+							back.put(path.peek().person, back.get(neighbor.person));
+						else if(dfsnum.get(path.peek().person) <= back.get(neighbor.person)){
+							if(!connectors.contains(path.peek().person)){
+								connectors.add(path.peek().person);
+							}
+						}
+					}else{
+						System.out.println(p.name + "(" + dfsnum.get(p) + ") <= " + neighbor.person.name + "(" + back.get(neighbor.person)+ ")");
+						if(dfsnum.get(p) > back.get(neighbor.person))
+							back.put(p, back.get(neighbor.person));
+						else if(dfsnum.get(p) <= back.get(neighbor.person)){
+							if(!once)
+								once = true;
+							else if(once && !connectors.contains(p)){
+								connectors.add(p);
+							}
+						}
+					}
+					neighbor = neighbor.next;
+					if(neighbor == null && path.size() > 0){
+						neighbor = path.pop();
+					}
+				}
+
+			}
+		}
+		for(Person p : dfsnum.keySet()){
+			System.out.println(p.name + " " + dfsnum.get(p) + " " + back.get(p));
+		}
+		
+		return connectors;
 	}
 	
 }

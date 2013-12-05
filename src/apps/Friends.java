@@ -144,19 +144,35 @@ public class Friends {
 						String school = br.readLine().toLowerCase();
 						ArrayList<PeopleGraph> cliques = friends.people.getSchoolSubgraph(school).getCliques();
 						
+						int num = 1;
 						for(PeopleGraph p : cliques){
+							System.out.println("Clique " + num + ":");
 							System.out.println(p);
 						}
 						
 					}else if(selection == 4){
-						//TODO Connectors
+						ArrayList<Person> connectors = friends.people.getConnectors();
+						
+						if(connectors.size() > 0){
+							//System.out.println("The connectors are: ");
+							boolean first = true;
+							for(Person p : connectors){
+								if(!first)
+									System.out.print(",");
+								else
+									first = false;
+								System.out.print(p.getName());
+							}
+							System.out.println();
+						}else{
+							System.out.println("There are no Connectors for this graph!");
+						}
 					}else if(selection == 5){
 						System.out.println("Exiting");
 						System.exit(0);
 					}else if(selection == 9) {
 						// Debug
 						System.out.println(friends.people.shortestPath("sam", "bob"));
-
 					}else{
 						System.out.println("Bad input please try agian.");
 					}
