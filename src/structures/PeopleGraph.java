@@ -18,7 +18,7 @@ public class PeopleGraph {
 	
 	public PeopleGraph(int initcap) {
 		this.nodes = new ArrayList<Person>(initcap);
-		this.adjLL = new AdjacencyLinkedList(initcap);
+		this.adjLL = new AdjacencyLinkedList();
 	}
 	
 	public Person get(int index) {
@@ -42,7 +42,7 @@ public class PeopleGraph {
 	}
 	
 	public PersonNode getNeighbor(String name) {
-		return this.adjLL.get(this.nameToIndex.get(name));
+		return this.adjLL.get(this.get(name));
 	}
 	
 	public PersonNode getNeighbor(Person person) {
@@ -52,11 +52,10 @@ public class PeopleGraph {
 	public void addEdge(String name1, String name2) {
 		Person p1 = this.get(name1);
 		Person p2 = this.get(name2);
-        int p1index = this.nameToIndex.get(name1);
-        int p2index = this.nameToIndex.get(name2);
 
-		this.adjLL.addEdge(p1index, p2);
-		this.adjLL.addEdge(p2index, p1);
+
+		this.adjLL.addEdge(p1, p2);
+		this.adjLL.addEdge(p2, p1);
 				
 	}
 	
