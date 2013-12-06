@@ -16,8 +16,8 @@ public class PeopleGraph {
 	ArrayList<Person> nodes;
 	AdjacencyLinkedList adjLL; 
 	
-	public PeopleGraph(int initcap) {
-		this.nodes = new ArrayList<Person>(initcap);
+	public PeopleGraph() {
+		this.nodes = new ArrayList<Person>();
 		this.adjLL = new AdjacencyLinkedList();
 	}
 	
@@ -87,7 +87,7 @@ public class PeopleGraph {
 	}
 	
 	public PeopleGraph getSchoolSubgraph(String school) {
-		PeopleGraph subgraph = new PeopleGraph(this.nodes.size());
+		PeopleGraph subgraph = new PeopleGraph();
 		
 		// it would probably be easier for this to be split into multiple functions
 		for (Person p: this.nodes) {
@@ -242,7 +242,7 @@ public class PeopleGraph {
 			if(skip){
 				continue;
 			}
-			PeopleGraph clique = new PeopleGraph(this.nodes.size());
+			PeopleGraph clique = new PeopleGraph();
 			Queue<Person> q = new ArrayDeque<Person>();
 			if (clique.get(p.getName()) == null) {
 				q.add(p);

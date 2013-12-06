@@ -41,7 +41,7 @@ public class Friends {
 				System.exit(-1);
 			}
 
-			people = new PeopleGraph(numPeople);
+			people = new PeopleGraph();
 			
 			int i = 0;
 			while(sc.hasNext() && i < numPeople){
