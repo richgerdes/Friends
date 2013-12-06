@@ -269,55 +269,52 @@ public class PeopleGraph {
 		HashMap<Person, Integer> dfsnum = new HashMap<Person, Integer>();
 		HashMap<Person, Integer> back = new HashMap<Person, Integer>();
 		Stack<PersonNode> path = new Stack<PersonNode>();
-		int d = 1;
-		int b = 1;
 		
+		//loop to account for cliques
 		for(Person p : this.nodes){
 			if(dfsnum.get(p) != null){
 				continue;
 			}
+			int d = 1;
 			
+			// set up starting person
 			dfsnum.put(p, d);
-			back.put(p, b);
-
-			d++;
-			b++;
+			back.put(p, d);
 			PersonNode neighbor = this.getNeighbor(p);
+			path.push(new PersonNode(p,null));
 			System.out.println(p.name);
 			
 			boolean once = false;
 
-			while(neighbor != null){
+			while(path.size()>0){
 				if(dfsnum.get(neighbor.person) == null){
-					dfsnum.put(neighbor.person, d);
-					back.put(neighbor.person, b);
 					d++;
-					b++;
+					
+					//set numbers
+					dfsnum.put(neighbor.person, d);
+					back.put(neighbor.person, d);
 					path.push(neighbor);
+					
+					//get neighbors
 					neighbor = this.getNeighbor(neighbor.person);
 				}else{
-					if(path.size() > 0){
-						System.out.println(path.peek().person.name + "(" + dfsnum.get(path.peek().person) + ") <= " + neighbor.person.name + "(" +back.get(neighbor.person)+ ")");
-						if(dfsnum.get(path.peek().person) > back.get(neighbor.person))
-							back.put(path.peek().person, back.get(neighbor.person));
-						else if(dfsnum.get(path.peek().person) <= back.get(neighbor.person)){
-							if(!connectors.contains(path.peek().person)){
-								connectors.add(path.peek().person);
-							}
-						}
-					}else{
-						System.out.println(p.name + "(" + dfsnum.get(p) + ") <= " + neighbor.person.name + "(" + back.get(neighbor.person)+ ")");
-						if(dfsnum.get(p) > back.get(neighbor.person))
-							back.put(p, back.get(neighbor.person));
-						else if(dfsnum.get(p) <= back.get(neighbor.person)){
-							if(!once)
-								once = true;
-							else if(once && !connectors.contains(p)){
-								connectors.add(p);
-							}
+					//System.out.println(path.peek().person.name + "(" + dfsnum.get(path.peek().person) + ") <= " + neighbor.person.name + "(" +back.get(neighbor.person)+ ")");
+					if(dfsnum.get(path.peek().person) > back.get(neighbor.person)) 						//not a connector
+						back.put(path.peek().person, back.get(neighbor.person)); 						//set back to back of neighbor
+					else if(dfsnum.get(path.peek().person) <= back.get(neighbor.person)){ 				//is a connector
+						if(path.peek().person == p && !once) 											//prevent false adding of starting person
+							once = true;
+						else if(!connectors.contains(path.peek().person)){								//if connector not already identified
+							connectors.add(path.peek().person);
+							//debugging
+							//System.out.println("Adding " + path.peek().person.name + "(" + dfsnum.get(path.peek().person) + "/" + back.get(path.peek().person) +")" );
 						}
 					}
+					
+					//get next neighbor
 					neighbor = neighbor.next;
+					
+					//if no neighbors left for person go back
 					if(neighbor == null && path.size() > 0){
 						neighbor = path.pop();
 					}
@@ -325,8 +322,10 @@ public class PeopleGraph {
 
 			}
 		}
+		
+		//debugging
 		for(Person p : dfsnum.keySet()){
-			System.out.println(p.name + " " + dfsnum.get(p) + " " + back.get(p));
+			//System.out.println(p.name + " " + dfsnum.get(p) + " " + back.get(p));
 		}
 		
 		return connectors;

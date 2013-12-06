@@ -1,0 +1,8 @@
+4
+michele|y|cornell
+rachel|n
+rich|y|ucla
+tom|y|ucla
+michele|rachel
+michele|tom
+tom|rich
