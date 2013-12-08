@@ -169,6 +169,23 @@ public class Friends {
 						}else{
 							System.out.println("There are no Connectors for this graph!");
 						}
+					}else if(selection == 6){
+						ArrayList<Person> connectors = friends.people.getConnectors_();
+						
+						if(connectors.size() > 0){
+							//System.out.println("The connectors are: ");
+							boolean first = true;
+							for(Person p : connectors){
+								if(!first)
+									System.out.print(",");
+								else
+									first = false;
+								System.out.print(p.getName());
+							}
+							System.out.println();
+						}else{
+							System.out.println("There are no Connectors for this graph!");
+						}
 					}else if(selection == 5){
 						System.out.println("Exiting");
 						System.exit(0);

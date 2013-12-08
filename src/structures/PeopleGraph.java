@@ -262,8 +262,24 @@ public class PeopleGraph {
 		}
 		return cliques;
 	}
+	
+	public ArrayList<Person> getConnectors(){
 
-	public ArrayList<Person> getConnectors() {
+		ArrayList<Person> connectors = new ArrayList<Person>();
+		HashMap<Person, Integer> dfsnum = new HashMap<Person, Integer>();
+		HashMap<Person, Integer> back = new HashMap<Person, Integer>();
+
+		for(Person p : this.nodes){
+			if(dfsnum.get(p) == null){
+				dfs(p, dfsnum, back, connectors, 1, true, "");
+			}
+		}
+		
+		return connectors;
+		
+	}
+
+	public ArrayList<Person> getConnectors_() {
 		ArrayList<Person> connectors = new ArrayList<Person>();
 		HashMap<Person, Integer> dfsnum = new HashMap<Person, Integer>();
 		HashMap<Person, Integer> back = new HashMap<Person, Integer>();
@@ -271,49 +287,36 @@ public class PeopleGraph {
 		
 		//loop to account for cliques
 		for(Person p : this.nodes){
+			
 			if(dfsnum.get(p) != null){
 				continue;
 			}
 			int d = 1;
-			
 			// set up starting person
 			dfsnum.put(p, d);
 			back.put(p, d);
 			PersonNode neighbor = this.getNeighbor(p);
 			path.push(new PersonNode(p,null));
-			System.out.println(p.name);
-			
 			boolean once = false;
 
 			while(path.size()>0){
+				
 				if(dfsnum.get(neighbor.person) == null){
 					d++;
-					
-					//set numbers
 					dfsnum.put(neighbor.person, d);
 					back.put(neighbor.person, d);
 					path.push(neighbor);
-					
-					//get neighbors
 					neighbor = this.getNeighbor(neighbor.person);
 				}else{
-					//System.out.println(path.peek().person.name + "(" + dfsnum.get(path.peek().person) + ") <= " + neighbor.person.name + "(" +back.get(neighbor.person)+ ")");
-					if(dfsnum.get(path.peek().person) > back.get(neighbor.person)) 						//not a connector
+					if(dfsnum.get(path.peek().person) > back.get(neighbor.person)){ 						//not a connector
 						back.put(path.peek().person, back.get(neighbor.person)); 						//set back to back of neighbor
-					else if(dfsnum.get(path.peek().person) <= back.get(neighbor.person)){ 				//is a connector
+					}else if(dfsnum.get(path.peek().person) <= back.get(neighbor.person)){ 				//is a connector
 						if(path.peek().person == p && !once) 											//prevent false adding of starting person
 							once = true;
 						else if(!connectors.contains(path.peek().person)){								//if connector not already identified
 							connectors.add(path.peek().person);
-							//debugging
-							//System.out.println("Adding " + path.peek().person.name + "(" + dfsnum.get(path.peek().person) + "/" + back.get(path.peek().person) +")" );
 						}
-					}
-					
-					//get next neighbor
-					neighbor = neighbor.next;
-					
-					//if no neighbors left for person go back
+					}neighbor = neighbor.next;
 					if(neighbor == null && path.size() > 0){
 						neighbor = path.pop();
 					}
@@ -322,12 +325,39 @@ public class PeopleGraph {
 			}
 		}
 		
-		//debugging
-		for(Person p : dfsnum.keySet()){
-			//System.out.println(p.name + " " + dfsnum.get(p) + " " + back.get(p));
+		return connectors;
+	}
+	
+	private int dfs(Person s, HashMap<Person, Integer> dfs, HashMap<Person, Integer> back, ArrayList<Person> connectors, Integer nextdfs, boolean sso, String tab){
+		if(dfs.get(s) != null){
+			System.out.println(tab + s.name + " already seen");
+			return nextdfs;
 		}
 		
-		return connectors;
+		dfs.put(s, nextdfs);
+		back.put(s, nextdfs);
+		nextdfs++;
+		System.out.println(tab + "dfs @ " + s.name + " " + dfs.get(s) + "/" + back.get(s));
+		
+		PersonNode n = this.getNeighbor(s);
+		while(n != null){
+			nextdfs = dfs(n.person, dfs, back, connectors, nextdfs, false, tab + "   ");
+			if(dfs.get(s) > dfs.get(n.person)){
+				if(back.get(s) > dfs.get(n.person)){
+					back.put(s, dfs.get(n.person));
+					System.out.println(tab + "dfs(" + s.name + ") > back(" + n.person.name + ") => " + s.name + " " + dfs.get(s) + "/" + back.get(s)); 
+				}
+			}else if(sso){
+				sso = false;
+				System.out.println(tab + s.name + " is NOT a connector");
+			}else if(!connectors.contains(s)){
+				System.out.println(tab + s.name + " is a connector");
+				connectors.add(s);
+			}
+			n = n.next;
+		}
+		
+		return nextdfs;
 	}
 	
 }
