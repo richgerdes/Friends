@@ -271,92 +271,60 @@ public class PeopleGraph {
 
 		for(Person p : this.nodes){
 			if(dfsnum.get(p) == null){
-				dfs(p, dfsnum, back, connectors, 1, true, "");
+				dfs(p, dfsnum, back, connectors, 1);
 			}
 		}
 		
 		return connectors;
 		
-	}
-
-	public ArrayList<Person> getConnectors_() {
-		ArrayList<Person> connectors = new ArrayList<Person>();
-		HashMap<Person, Integer> dfsnum = new HashMap<Person, Integer>();
-		HashMap<Person, Integer> back = new HashMap<Person, Integer>();
-		Stack<PersonNode> path = new Stack<PersonNode>();
-		
-		//loop to account for cliques
-		for(Person p : this.nodes){
-			
-			if(dfsnum.get(p) != null){
-				continue;
-			}
-			int d = 1;
-			// set up starting person
-			dfsnum.put(p, d);
-			back.put(p, d);
-			PersonNode neighbor = this.getNeighbor(p);
-			path.push(new PersonNode(p,null));
-			boolean once = false;
-
-			while(path.size()>0){
-				
-				if(dfsnum.get(neighbor.person) == null){
-					d++;
-					dfsnum.put(neighbor.person, d);
-					back.put(neighbor.person, d);
-					path.push(neighbor);
-					neighbor = this.getNeighbor(neighbor.person);
-				}else{
-					if(dfsnum.get(path.peek().person) > back.get(neighbor.person)){ 						//not a connector
-						back.put(path.peek().person, back.get(neighbor.person)); 						//set back to back of neighbor
-					}else if(dfsnum.get(path.peek().person) <= back.get(neighbor.person)){ 				//is a connector
-						if(path.peek().person == p && !once) 											//prevent false adding of starting person
-							once = true;
-						else if(!connectors.contains(path.peek().person)){								//if connector not already identified
-							connectors.add(path.peek().person);
-						}
-					}neighbor = neighbor.next;
-					if(neighbor == null && path.size() > 0){
-						neighbor = path.pop();
-					}
-				}
-
-			}
-		}
-		
-		return connectors;
 	}
 	
-	private int dfs(Person s, HashMap<Person, Integer> dfs, HashMap<Person, Integer> back, ArrayList<Person> connectors, Integer nextdfs, boolean sso, String tab){
+	private int dfs(Person s, HashMap<Person, Integer> dfs, HashMap<Person, Integer> back, ArrayList<Person> connectors, Integer nextdfs){
 		if(dfs.get(s) != null){
-			System.out.println(tab + s.name + " already seen");
 			return nextdfs;
 		}
 		
 		dfs.put(s, nextdfs);
 		back.put(s, nextdfs);
 		nextdfs++;
-		System.out.println(tab + "dfs @ " + s.name + " " + dfs.get(s) + "/" + back.get(s));
 		
 		PersonNode n = this.getNeighbor(s);
 		while(n != null){
-			nextdfs = dfs(n.person, dfs, back, connectors, nextdfs, false, tab + "   ");
-			if(dfs.get(s) > dfs.get(n.person)){
+			int lastdfs = nextdfs;
+			nextdfs = dfs(n.person, dfs, back, connectors, nextdfs);
+			if(lastdfs == nextdfs){
 				if(back.get(s) > dfs.get(n.person)){
 					back.put(s, dfs.get(n.person));
-					System.out.println(tab + "dfs(" + s.name + ") > back(" + n.person.name + ") => " + s.name + " " + dfs.get(s) + "/" + back.get(s)); 
 				}
-			}else if(sso){
-				sso = false;
-				System.out.println(tab + s.name + " is NOT a connector");
-			}else if(!connectors.contains(s)){
-				System.out.println(tab + s.name + " is a connector");
-				connectors.add(s);
+			}else{
+				if(dfs.get(s) <= back.get(n.person)){
+					if(dfs.get(s) == 1){
+						PersonNode pn = this.getNeighbor(s);
+						boolean c = false;
+						while(pn != null){
+							if(back.get(pn.person) == null){
+								break;
+							}else if(c && back.get(pn.person) == 1){
+								if(!connectors.contains(s)){
+									connectors.add(s);
+								}
+								break;
+							}else if(back.get(pn.person) == 1){
+								c = true;
+							}
+							pn = pn.next;
+						}
+					}else if(!connectors.contains(s)){
+						connectors.add(s);
+					}
+				}else{
+					if(back.get(s) > back.get(n.person)){
+						back.put(s, back.get(n.person));
+					}
+				}
 			}
 			n = n.next;
 		}
-		
 		return nextdfs;
 	}
 	

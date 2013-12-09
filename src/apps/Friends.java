@@ -95,7 +95,7 @@ public class Friends {
 		try {
 			
 			while(true){
-				System.out.print("What is the name of the input file:");
+				System.out.print("What is the name of the input file: ");
 				
 				path = br.readLine();
 				
@@ -116,6 +116,7 @@ public class Friends {
 				System.out.println("3) Cliques at school");
 				System.out.println("4) Show Connectors");
 				System.out.println("5) Quit");
+				System.out.print(">> ");
 				
 				String read = br.readLine();
 				if(isNumber(read)){
@@ -169,29 +170,9 @@ public class Friends {
 						}else{
 							System.out.println("There are no Connectors for this graph!");
 						}
-					}else if(selection == 6){
-						ArrayList<Person> connectors = friends.people.getConnectors_();
-						
-						if(connectors.size() > 0){
-							//System.out.println("The connectors are: ");
-							boolean first = true;
-							for(Person p : connectors){
-								if(!first)
-									System.out.print(",");
-								else
-									first = false;
-								System.out.print(p.getName());
-							}
-							System.out.println();
-						}else{
-							System.out.println("There are no Connectors for this graph!");
-						}
 					}else if(selection == 5){
 						System.out.println("Exiting");
 						System.exit(0);
-					}else if(selection == 9) {
-						// Debug
-						System.out.println(friends.people.shortestPath("sam", "bob"));
 					}else{
 						System.out.println("Bad input please try agian.");
 					}
