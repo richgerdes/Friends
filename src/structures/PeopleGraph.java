@@ -288,6 +288,8 @@ public class PeopleGraph {
 		back.put(s, nextdfs);
 		nextdfs++;
 		
+		boolean sso = true;
+		
 		PersonNode n = this.getNeighbor(s);
 		while(n != null){
 			int lastdfs = nextdfs;
@@ -299,20 +301,12 @@ public class PeopleGraph {
 			}else{
 				if(dfs.get(s) <= back.get(n.person)){
 					if(dfs.get(s) == 1){
-						PersonNode pn = this.getNeighbor(s);
-						boolean c = false;
-						while(pn != null){
-							if(back.get(pn.person) == null){
-								break;
-							}else if(c && back.get(pn.person) == 1){
-								if(!connectors.contains(s)){
-									connectors.add(s);
-								}
-								break;
-							}else if(back.get(pn.person) == 1){
-								c = true;
+						if(sso){
+							sso = false;
+						}else{
+							if(!connectors.contains(s)){
+								connectors.add(s);
 							}
-							pn = pn.next;
 						}
 					}else if(!connectors.contains(s)){
 						connectors.add(s);
